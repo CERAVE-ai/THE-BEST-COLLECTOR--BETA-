@@ -2249,6 +2249,19 @@
         }
         .battle-surrender-btn:hover:not(:disabled) { background: rgba(244,63,94,0.2); transform: translateY(-1px); }
         .battle-surrender-btn:disabled { opacity: 0.32; cursor: not-allowed; }
+        .battle-start-row {
+            display: flex; justify-content: center; margin: 12px 0 4px;
+        }
+        .battle-start-btn {
+            width: 100%; padding: 16px; border-radius: 14px; border: none;
+            background: linear-gradient(135deg, #059669, #34d399);
+            color: #0a0f1e; font-family: 'Bebas Neue', sans-serif;
+            font-size: 22px; letter-spacing: 4px; cursor: pointer; font-weight: 700;
+            transition: all 0.2s;
+            box-shadow: 0 0 28px rgba(52,211,153,0.35), 0 8px 24px rgba(0,0,0,0.4);
+        }
+        .battle-start-btn:hover { transform: translateY(-2px); box-shadow: 0 0 42px rgba(52,211,153,0.55), 0 12px 32px rgba(0,0,0,0.4); }
+        .battle-start-btn:active { transform: scale(0.97); }
         .battle-log {
             margin-top: 12px; max-height: 88px; overflow-y: auto;
             background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05);
@@ -2716,7 +2729,7 @@
                 </div>
                 <div class="battle-info-box">
                     <div class="battle-info-label">Tiempo Restante</div>
-                    <div class="battle-timer-display" id="battleTimer">01:00</div>
+                    <div class="battle-timer-display" id="battleTimer">05:00</div>
                 </div>
             </div>
             <div class="battle-tactics-row">
@@ -2725,7 +2738,10 @@
                 <button class="battle-tactic-btn battle-tactic-espio"   id="tacticEspio"   title="Revela el presupuesto máximo del bot más fuerte activo · Cuesta 2.000$">🔍 ESPIONAJE</button>
             </div>
             <div class="battle-spy-info" id="battleSpyInfo"></div>
-            <div class="battle-action-row">
+            <div class="battle-start-row" id="battleStartRow">
+                <button class="battle-start-btn" id="battleStartBtn">⚔️ EMPEZAR BATALLA</button>
+            </div>
+            <div class="battle-action-row" id="battleActionRow">
                 <button class="battle-bid-btn"       id="battleBidBtn">🏷️ PUJAR</button>
                 <button class="battle-surrender-btn" id="battleSurrenderBtn">🏳️ RÍNDETE</button>
             </div>
@@ -6020,10 +6036,11 @@
             playerBid: 0,
             currentHighBid: startBid,
             increment,
-            secondsLeft: 60,
+            secondsLeft: 300,
             ended: false,
             playerIn: false,
-            spyUsed: false
+            spyUsed: false,
+            battleStarted: false
         };
 
         // Show battle card, hide waiting
@@ -6031,10 +6048,15 @@
         document.getElementById('battleWaiting').style.display = 'none';
         document.getElementById('battleChest').textContent = '📦';
 
+        // Show start button, hide action row
+        document.getElementById('battleStartRow').style.display = 'flex';
+        document.getElementById('battleActionRow').style.display = 'none';
+
         // Reset log
         const log = document.getElementById('battleLog');
         log.innerHTML = '';
-        addBattleLog(`⚔️ NUEVA BATALLA · Puja inicial: ${startBid.toLocaleString()} $`, 'event');
+        addBattleLog(`⚔️ NUEVA BATALLA LISTA · Pulsa EMPEZAR para comenzar`, 'event');
+        addBattleLog(`💰 Puja inicial: ${startBid.toLocaleString()} $`, 'event');
 
         // Reset spy info
         const spyEl = document.getElementById('battleSpyInfo');
@@ -6042,8 +6064,6 @@
         spyEl.textContent = '';
 
         updateBattleUI();
-        startBattleCountdown();
-        scheduleBotBids();
     }
 
     function addBattleLog(text, cls) {
@@ -6102,6 +6122,10 @@
             bidBtn.disabled = true;
             surrenderBtn.disabled = true;
             bidBtn.textContent = '🏁 BATALLA TERMINADA';
+        } else if (!battle.battleStarted) {
+            bidBtn.disabled = true;
+            surrenderBtn.disabled = true;
+            bidBtn.textContent = '🏷️ PUJAR';
         } else if (state.over) {
             bidBtn.disabled = true;
         } else if (state.balance < nextBidAmount) {
@@ -6111,15 +6135,15 @@
             bidBtn.disabled = false;
             bidBtn.textContent = `🏷️ PUJAR ${nextBidAmount.toLocaleString()} $`;
         }
-        surrenderBtn.disabled = ended || !playerIn;
+        surrenderBtn.disabled = ended || !playerIn || !battle.battleStarted;
 
         // Tactics
         const tacticFarol   = document.getElementById('tacticFarol');
         const tacticSilence = document.getElementById('tacticSilence');
         const tacticEspio   = document.getElementById('tacticEspio');
-        tacticFarol.disabled   = ended || !playerIn;
-        tacticSilence.disabled = ended || (state.silenceCharges || 0) <= 0;
-        tacticEspio.disabled   = ended || battle.spyUsed || state.balance < 2000;
+        tacticFarol.disabled   = ended || !playerIn || !battle.battleStarted;
+        tacticSilence.disabled = ended || (state.silenceCharges || 0) <= 0 || !battle.battleStarted;
+        tacticEspio.disabled   = ended || battle.spyUsed || state.balance < 2000 || !battle.battleStarted;
 
         // Silence badge
         document.getElementById('silenceChargesBadge').textContent = state.silenceCharges || 0;
@@ -6306,7 +6330,7 @@
         saveGame();
 
         document.getElementById('battleBidBtn').textContent = '🏳️ TE RENDISTE';
-        scheduleBattleWait(90); // 90s until next battle
+        scheduleBattleWait(300);
     }
 
     function clearBotTimers() {
@@ -6374,7 +6398,7 @@
         }
 
         updateBattleUI();
-        scheduleBattleWait(playerWins ? 60 : 45);
+        scheduleBattleWait(300);
     }
 
     function scheduleBattleWait(seconds) {
@@ -6399,6 +6423,16 @@
     }
 
     // Wire up battle buttons
+    document.getElementById('battleStartBtn').addEventListener('click', () => {
+        if (!battle || battle.battleStarted || battle.ended) return;
+        battle.battleStarted = true;
+        document.getElementById('battleStartRow').style.display = 'none';
+        document.getElementById('battleActionRow').style.display = 'flex';
+        addBattleLog('⚔️ ¡BATALLA COMENZADA!', 'event');
+        updateBattleUI();
+        startBattleCountdown();
+        scheduleBotBids();
+    });
     document.getElementById('battleBidBtn').addEventListener('click', playerBid);
     document.getElementById('battleSurrenderBtn').addEventListener('click', surrenderBattle);
     document.getElementById('tacticFarol').addEventListener('click', useFarol);
