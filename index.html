@@ -2249,6 +2249,49 @@
         }
         .battle-surrender-btn:hover:not(:disabled) { background: rgba(244,63,94,0.2); transform: translateY(-1px); }
         .battle-surrender-btn:disabled { opacity: 0.32; cursor: not-allowed; }
+        /* ── PARÁSITOS ─────────────────────────────── */
+        .infected-badge {
+            position: absolute; top: 4px; left: 4px;
+            font-size: 14px; z-index: 5;
+            animation: infectPulse 1.8s ease-in-out infinite;
+        }
+        @keyframes infectPulse {
+            0%,100% { transform: scale(1); opacity: 1; }
+            50%      { transform: scale(1.35); opacity: 0.7; }
+        }
+        #glitchCursor {
+            display: none; position: fixed; pointer-events: none;
+            z-index: 99999; font-size: 22px; transform: translate(-50%,-50%);
+            filter: drop-shadow(0 0 6px #f43f5e);
+            transition: none;
+        }
+        #thiefDiv {
+            display: none; position: fixed; z-index: 99998;
+            background: linear-gradient(135deg,#7c3aed,#a855f7);
+            color: #fff; padding: 10px 18px; border-radius: 12px;
+            font-family: 'Bebas Neue', sans-serif; font-size: 15px;
+            letter-spacing: 2px; cursor: pointer; user-select: none;
+            box-shadow: 0 0 24px rgba(168,85,247,0.6);
+            align-items: center; gap: 8px;
+            border: 2px solid #c084fc;
+            transition: transform 0.1s;
+        }
+        #thiefDiv:active { transform: scale(0.9); }
+        .parasite-alert {
+            position: fixed; top: 24px; left: 50%; transform: translateX(-50%);
+            background: #1e0a2e; border: 1.5px solid #a855f7;
+            border-radius: 12px; padding: 10px 22px;
+            font-family: 'Rajdhani', sans-serif; font-size: 14px;
+            font-weight: 700; letter-spacing: 1.5px; color: #e879f9;
+            z-index: 100000; box-shadow: 0 0 28px rgba(168,85,247,0.4);
+            pointer-events: none; text-align: center;
+            animation: parasiteIn 0.3s ease;
+        }
+        @keyframes parasiteIn {
+            from { opacity:0; transform: translateX(-50%) translateY(-12px); }
+            to   { opacity:1; transform: translateX(-50%) translateY(0); }
+        }
+        /* ──────────────────────────────────────────── */
         .battle-start-row {
             display: flex; justify-content: center; margin: 12px 0 4px;
         }
@@ -3546,7 +3589,9 @@
         // Aplicar mutación
         const mutation = getMutation();
         finalPrice = Math.round(finalPrice * mutation.mult);
-        const bonusWinner = { ...winner, price: finalPrice, favorite: false, mutation: mutation.id };
+        const isInfected = Math.random() < 0.10;
+        const bonusWinner = { ...winner, price: finalPrice, favorite: false, mutation: mutation.id,
+            ...(isInfected ? { infected: true, infectedSince: Date.now(), parasiteUsed: false } : {}) };
         state.invValue += finalPrice;
         if (finalPrice > state.best) state.best = finalPrice;
         inventory.push(bonusWinner);
@@ -3789,6 +3834,7 @@
             d.innerHTML = `
                 <div class="inv-card-bar" style="background:${rarities[item.rarity] ? rarities[item.rarity].color : '#fbbf24'}"></div>
                 <div class="fav-btn" title="${isFav ? 'Quitar favorito' : 'Marcar favorito'}">${isFav ? '⭐' : '☆'}</div>
+                ${item.infected && !item.parasiteUsed ? '<div class="infected-badge" title="¡Objeto infectado! Si lo guardas mucho tiempo...">🦠</div>' : ''}
                 <div class="inv-card-icon">${item.icon}</div>
                 <div class="inv-card-name">${item.name}</div>
                 ${(() => { const m = mutations[item.mutation] || mutations.normal; return `<div class="mutation-badge mutation-${m.id}">${m.icon} ${m.label}</div>`; })()}
@@ -6781,6 +6827,122 @@
     document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
     document.getElementById('musicToggle').addEventListener('click', toggleMusic);
     document.querySelectorAll('.screen-btn').forEach(btn => btn.addEventListener('click', () => location.reload()));
+
+    // ─── PARÁSITOS EN LA INTERFAZ ────────────────────────────────────────────────
+    // Crear elementos de parásitos en el DOM
+    (function() {
+        const gc = document.createElement('div'); gc.id = 'glitchCursor'; gc.textContent = '🐛'; document.body.appendChild(gc);
+        const td = document.createElement('div'); td.id = 'thiefDiv'; document.body.appendChild(td);
+    })();
+    let glitchCursorActive = false;
+    let thiefActive = false;
+
+    function showParasiteAlert(msg) {
+        const el = document.createElement('div');
+        el.className = 'parasite-alert';
+        el.textContent = msg;
+        document.body.appendChild(el);
+        setTimeout(() => { el.style.opacity = '0'; el.style.transition = 'opacity 0.5s'; setTimeout(() => el.remove(), 500); }, 3500);
+    }
+
+    function activateGlitchCursor() {
+        if (glitchCursorActive) return;
+        glitchCursorActive = true;
+        document.body.style.cursor = 'none';
+        const cursor = document.getElementById('glitchCursor');
+        cursor.style.display = 'block';
+        showParasiteAlert('🖱️ ¡EL GLITCH DEL RATÓN te ha infectado! Tu cursor está bajo el agua...');
+
+        let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+        let phase = 0;
+        let glitchRaf;
+
+        const onMove = (e) => { mouseX = e.clientX; mouseY = e.clientY; };
+        document.addEventListener('mousemove', onMove);
+
+        const animate = () => {
+            phase += 0.07;
+            const wobbleX = Math.sin(phase * 1.9) * 38 + Math.sin(phase * 0.7) * 18;
+            const wobbleY = Math.cos(phase * 1.4) * 28 + Math.cos(phase * 2.3) * 12;
+            cursor.style.left = (mouseX + wobbleX) + 'px';
+            cursor.style.top  = (mouseY + wobbleY) + 'px';
+            glitchRaf = requestAnimationFrame(animate);
+        };
+        glitchRaf = requestAnimationFrame(animate);
+
+        setTimeout(() => {
+            glitchCursorActive = false;
+            document.body.style.cursor = '';
+            cursor.style.display = 'none';
+            document.removeEventListener('mousemove', onMove);
+            cancelAnimationFrame(glitchRaf);
+            showParasiteAlert('✅ El Glitch del Ratón ha desaparecido... por ahora.');
+        }, 120000);
+    }
+
+    function activateButtonThief() {
+        if (thiefActive) return;
+        thiefActive = true;
+        let thiefHits = 0;
+        const HITS_NEEDED = 3;
+
+        const sellBtn = document.getElementById('sellAllBtn');
+        sellBtn.style.visibility = 'hidden';
+
+        showParasiteAlert('👾 ¡EL LADRÓN DE BOTONES ha robado tu botón! Haz clic en él ' + HITS_NEEDED + ' veces para recuperarlo.');
+
+        const thief = document.getElementById('thiefDiv');
+        thief.innerHTML = '👾 &nbsp;<span style="font-size:12px;letter-spacing:1px;">VENDER TODO 💰</span>';
+        thief.style.display = 'flex';
+
+        let x = Math.random() * (window.innerWidth - 220);
+        let y = Math.random() * (window.innerHeight - 80);
+        const baseSpeed = 3.5;
+        let vx = (Math.random() < 0.5 ? 1 : -1) * (baseSpeed + Math.random() * 1.5);
+        let vy = (Math.random() < 0.5 ? 1 : -1) * (baseSpeed + Math.random() * 1.5);
+        let speed = 1;
+        let thiefRaf;
+
+        const moveThief = () => {
+            x += vx * speed;
+            y += vy * speed;
+            if (x <= 0 || x >= window.innerWidth - 220)  { vx = -vx; x = Math.max(0, Math.min(x, window.innerWidth - 220)); }
+            if (y <= 0 || y >= window.innerHeight - 80)  { vy = -vy; y = Math.max(0, Math.min(y, window.innerHeight - 80)); }
+            thief.style.left = x + 'px';
+            thief.style.top  = y + 'px';
+            thiefRaf = requestAnimationFrame(moveThief);
+        };
+        moveThief();
+
+        thief.onclick = () => {
+            thiefHits++;
+            thief.style.transform = 'scale(0.8) rotate(-8deg)';
+            setTimeout(() => { thief.style.transform = ''; }, 150);
+            speed += 0.6;
+            if (thiefHits >= HITS_NEEDED) {
+                cancelAnimationFrame(thiefRaf);
+                thief.style.display = 'none';
+                sellBtn.style.visibility = '';
+                thiefActive = false;
+                showParasiteAlert('✅ ¡Atrapaste al ladrón! El botón ha vuelto a su sitio.');
+            } else {
+                showParasiteAlert(`👊 ¡Golpe ${thiefHits}/${HITS_NEEDED}! ¡Más rápido!`);
+            }
+        };
+    }
+
+    // Comprobar cada 5s si algún objeto infectado lleva más de 15 segundos en el inventario
+    setInterval(() => {
+        if (state.over || glitchCursorActive || thiefActive) return;
+        const now = Date.now();
+        const ready = inventory.filter(item => item.infected && !item.parasiteUsed && (now - item.infectedSince) > 15 * 1000);
+        if (ready.length > 0) {
+            ready[0].parasiteUsed = true;
+            if (Math.random() < 0.5) activateGlitchCursor();
+            else activateButtonThief();
+        }
+    }, 5000);
+    // ─────────────────────────────────────────────────────────────────────────────
 
 </script>
 </body>
