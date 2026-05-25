@@ -464,6 +464,26 @@
         .spin-btn:hover { transform: translateY(-3px); box-shadow: 0 0 50px var(--theme-glow), 0 16px 40px rgba(0,0,0,0.5); }
         .spin-btn:active { transform: scale(0.97); }
         .spin-btn:disabled { opacity: 0.4; pointer-events: none; filter: grayscale(0.5); }
+        .spin-btn.ghost-trap {
+            background: linear-gradient(135deg, #7f1d1d, #dc2626) !important;
+            box-shadow: 0 0 40px rgba(220,38,38,0.7), 0 8px 32px rgba(0,0,0,0.5) !important;
+            color: #fca5a5 !important; letter-spacing: 2px !important;
+            animation: ghostPulse 0.4s ease-in-out infinite alternate;
+        }
+        @keyframes ghostPulse {
+            from { box-shadow: 0 0 30px rgba(220,38,38,0.5); transform: scale(1); }
+            to   { box-shadow: 0 0 60px rgba(220,38,38,0.9); transform: scale(1.02); }
+        }
+        .ghost-toast {
+            position: fixed; top: 80px; left: 50%; transform: translateX(-50%);
+            background: linear-gradient(135deg,#7f1d1d,#991b1b);
+            border: 1px solid rgba(220,38,38,0.5);
+            color: #fca5a5; padding: 12px 28px; border-radius: 14px;
+            font-family: 'Rajdhani',sans-serif; font-size: 16px; font-weight: 700;
+            letter-spacing: 2px; z-index: 9999; text-align: center;
+            box-shadow: 0 4px 30px rgba(220,38,38,0.35);
+            animation: fadeFlash 3.5s forwards;
+        }
 
         /* AUTO ABRIR */
         .spin-wrap { gap: 16px; }
@@ -2784,7 +2804,7 @@
         <button class="splash-play-btn" id="playBtn">▶ &nbsp;JUGAR</button>
         <div class="splash-by">Empieza con <span>2.000 monedas</span></div>
         <div style="margin-top:14px;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:2px;">🔧 ACTUALICACION &nbsp;25/ 05 / 2026</div>
-        <div style="margin-top:8px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:2px;">Versión Del Juego Actual #37</div>
+        <div style="margin-top:8px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:2px;">Versión Del Juego Actual #38</div>
     </div>
 </div>
 
@@ -3954,7 +3974,7 @@
         saveGame();
         showModal(bonusWinner);
         state.spinning = false;
-        spinBtn.disabled = false;
+        enableSpinBtn();
         scheduleNextAutoSpin();
     }
 
@@ -4615,7 +4635,77 @@
         }, 350);
     }
 
-    spinBtn.addEventListener('click', () => { playSound('click'); spin(); });
+    // ─── CLIC FANTASMA ───────────────────────────────────────────────────────────
+    let ghostTrapActive  = false;
+    let ghostTrapTimer   = null;
+    let rapidSpinCount   = 0;
+    let lastSpinEndTime  = 0;
+    const GHOST_RAPID_MS = 4000;  // clics en menos de 4s tras fin de giro = "frenético"
+    const GHOST_THRESHOLD = 5;    // mínimo de clics rápidos antes de que empiece la trampa
+    const GHOST_PENALTY   = 1000000;
+
+    function enableSpinBtn() {
+        const now = Date.now();
+        // Contabilizar racha rápida
+        if (lastSpinEndTime > 0 && (now - lastSpinEndTime) < GHOST_RAPID_MS) {
+            rapidSpinCount++;
+        } else {
+            rapidSpinCount = 1;
+        }
+        lastSpinEndTime = now;
+
+        // Determinar si activar trampa
+        const extraSpins = Math.max(0, rapidSpinCount - GHOST_THRESHOLD);
+        const prob = Math.min(0.05 + extraSpins * 0.05, 0.35); // 5%–35%
+        if (rapidSpinCount >= GHOST_THRESHOLD && Math.random() < prob && !autoAbrirActive) {
+            activateGhostTrap();
+        } else {
+            spinBtn.disabled = false;
+        }
+    }
+
+    function activateGhostTrap() {
+        ghostTrapActive = true;
+        spinBtn.disabled = false;
+        spinBtn.textContent = '💸 DONAR 1.000.000$ A LA BANCA';
+        spinBtn.classList.add('ghost-trap');
+        ghostTrapTimer = setTimeout(() => deactivateGhostTrap(false), 2000);
+    }
+
+    function deactivateGhostTrap(clicked) {
+        clearTimeout(ghostTrapTimer);
+        ghostTrapActive = false;
+        spinBtn.classList.remove('ghost-trap');
+        spinBtn.textContent = 'ABRIR COFRE';
+        if (clicked) {
+            // El jugador cayó en la trampa
+            const loss = Math.min(GHOST_PENALTY, Math.floor(state.balance));
+            if (loss > 0) {
+                state.balance -= loss;
+                updateStats();
+                saveGame();
+            }
+            const msgs = [
+                '👻 ¡CLIC FANTASMA! -1.000.000$ donados a la banca por ir a lo loco',
+                '💸 ¡Sin atención! La banca agradece tu generosa donación de 1.000.000$',
+                '🤖 ¿Autoclicker? La banca cobra por eso. -1.000.000$',
+                '👻 ¡PILLADO! Clic sin pensar = 1.000.000$ menos en tu bolsillo',
+                '💀 La banca cobra el Impuesto del Clic Frenético. -1.000.000$'
+            ];
+            const el = document.createElement('div');
+            el.className = 'ghost-toast';
+            el.textContent = msgs[Math.floor(Math.random() * msgs.length)];
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 3600);
+            rapidSpinCount = 0; // reset racha tras penalización
+        }
+    }
+    // ─────────────────────────────────────────────────────────────────────────────
+
+    spinBtn.addEventListener('click', () => {
+        if (ghostTrapActive) { deactivateGhostTrap(true); return; }
+        playSound('click'); spin();
+    });
     document.getElementById('autoAbrirBtn').addEventListener('click', buyAutoAbrir);
     document.getElementById('autoAbrirPauseBtn').addEventListener('click', pauseAutoAbrir);
 
