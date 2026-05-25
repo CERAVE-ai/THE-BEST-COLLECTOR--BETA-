@@ -2478,6 +2478,123 @@
             transition: all 0.2s; white-space: nowrap;
         }
         #museoBtnHeader:hover { background: rgba(251,191,36,0.18); box-shadow: 0 0 14px rgba(251,191,36,0.25); }
+        /* ── BANCO ─────────────────────────────────────────────────────── */
+        #bancoBtnHeader {
+            padding: 7px 14px; border-radius: 10px; border: 1px solid rgba(52,211,153,0.3);
+            background: rgba(52,211,153,0.08); color: #34d399;
+            font-family: 'Rajdhani',sans-serif; font-size: 12px;
+            font-weight: 700; letter-spacing: 2px; cursor: pointer;
+            transition: all 0.2s; white-space: nowrap;
+        }
+        #bancoBtnHeader:hover { background: rgba(52,211,153,0.18); box-shadow: 0 0 14px rgba(52,211,153,0.25); }
+        #bancoOverlay {
+            display: none; position: fixed; inset: 0; z-index: 9000;
+            background: #050a10;
+            flex-direction: column; overflow: hidden;
+        }
+        #bancoOverlay.open { display: flex; }
+        .banco-topbar {
+            display: flex; align-items: center; gap: 14px;
+            padding: 12px 20px; background: rgba(0,0,0,0.5);
+            border-bottom: 1px solid rgba(52,211,153,0.15); flex-shrink: 0;
+        }
+        .banco-topbar-title {
+            font-family: 'Rajdhani',sans-serif; font-size: 17px; font-weight: 700;
+            letter-spacing: 3px; color: #34d399; flex: 1;
+        }
+        #bancoBackBtn {
+            padding: 6px 16px; border-radius: 8px; border: 1px solid rgba(52,211,153,0.25);
+            background: rgba(52,211,153,0.07); color: #34d399;
+            font-family: 'Rajdhani',sans-serif; font-size: 13px; font-weight: 700;
+            letter-spacing: 1px; cursor: pointer; transition: all 0.2s;
+        }
+        #bancoBackBtn:hover { background: rgba(52,211,153,0.18); }
+        .banco-body {
+            flex: 1; display: flex; align-items: center; justify-content: center;
+            padding: 30px 20px; overflow-y: auto;
+        }
+        .banco-card {
+            background: rgba(10,20,15,0.95); border: 1px solid rgba(52,211,153,0.2);
+            border-radius: 20px; padding: 36px 42px; max-width: 560px; width: 100%;
+            box-shadow: 0 0 60px rgba(52,211,153,0.06);
+        }
+        .banco-icon { font-size: 52px; text-align: center; margin-bottom: 6px; }
+        .banco-card-title {
+            font-family: 'Rajdhani',sans-serif; font-size: 22px; font-weight: 700;
+            letter-spacing: 3px; color: #34d399; text-align: center; margin-bottom: 4px;
+        }
+        .banco-subtitle {
+            font-size: 12px; color: #64748b; text-align: center; letter-spacing: 1px;
+            margin-bottom: 28px;
+        }
+        .banco-stats {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 28px;
+        }
+        .banco-stat {
+            background: rgba(0,0,0,0.4); border: 1px solid rgba(52,211,153,0.12);
+            border-radius: 12px; padding: 14px 16px; text-align: center;
+        }
+        .banco-stat-label {
+            font-size: 10px; letter-spacing: 2px; color: #64748b;
+            text-transform: uppercase; margin-bottom: 6px;
+        }
+        .banco-stat-value {
+            font-family: 'JetBrains Mono',monospace; font-size: 18px; font-weight: 700; color: #34d399;
+        }
+        .banco-stat-value.wallet { color: #60a5fa; }
+        .banco-timer-bar {
+            background: rgba(0,0,0,0.4); border: 1px solid rgba(52,211,153,0.12);
+            border-radius: 12px; padding: 14px 16px; margin-bottom: 28px; text-align: center;
+        }
+        .banco-timer-label { font-size: 10px; letter-spacing: 2px; color: #64748b; text-transform: uppercase; margin-bottom: 6px; }
+        .banco-timer-track {
+            background: rgba(255,255,255,0.05); border-radius: 99px; height: 8px; margin-bottom: 6px; overflow: hidden;
+        }
+        .banco-timer-fill {
+            height: 100%; background: linear-gradient(90deg,#34d399,#10b981);
+            border-radius: 99px; transition: width 1s linear;
+        }
+        .banco-timer-text { font-family: 'JetBrains Mono',monospace; font-size: 13px; color: #34d399; }
+        .banco-actions { display: flex; flex-direction: column; gap: 16px; }
+        .banco-input-row {
+            display: flex; gap: 10px; align-items: center;
+        }
+        .banco-input {
+            flex: 1; background: rgba(0,0,0,0.5); border: 1px solid rgba(52,211,153,0.2);
+            border-radius: 10px; padding: 10px 14px; color: #e2e8f0;
+            font-family: 'JetBrains Mono',monospace; font-size: 14px; outline: none;
+        }
+        .banco-input:focus { border-color: rgba(52,211,153,0.5); }
+        .banco-btn {
+            padding: 10px 20px; border-radius: 10px; border: none; cursor: pointer;
+            font-family: 'Rajdhani',sans-serif; font-size: 14px; font-weight: 700;
+            letter-spacing: 1.5px; transition: all 0.2s; white-space: nowrap;
+        }
+        .banco-btn-deposit {
+            background: linear-gradient(135deg,#065f46,#047857); color: #a7f3d0;
+            border: 1px solid rgba(52,211,153,0.3);
+        }
+        .banco-btn-deposit:hover { background: linear-gradient(135deg,#047857,#059669); box-shadow: 0 0 16px rgba(52,211,153,0.25); }
+        .banco-btn-withdraw {
+            background: linear-gradient(135deg,#1e3a5f,#1e40af); color: #93c5fd;
+            border: 1px solid rgba(96,165,250,0.3);
+        }
+        .banco-btn-withdraw:hover { background: linear-gradient(135deg,#1e40af,#2563eb); box-shadow: 0 0 16px rgba(96,165,250,0.2); }
+        .banco-quick-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+        .banco-quick { padding: 5px 12px; border-radius: 8px; border: 1px solid rgba(52,211,153,0.2); background: rgba(52,211,153,0.06); color: #34d399; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.15s; }
+        .banco-quick:hover { background: rgba(52,211,153,0.15); }
+        .banco-interest-note {
+            text-align: center; font-size: 11px; color: #475569; margin-top: 16px; letter-spacing: 1px;
+        }
+        .banco-interest-flash {
+            position: fixed; top: 70px; left: 50%; transform: translateX(-50%);
+            background: linear-gradient(135deg,#065f46,#047857); color: #a7f3d0;
+            padding: 10px 24px; border-radius: 12px; font-family: 'Rajdhani',sans-serif;
+            font-size: 15px; font-weight: 700; letter-spacing: 2px;
+            box-shadow: 0 4px 24px rgba(52,211,153,0.3); z-index: 9999;
+            animation: fadeFlash 3s forwards;
+        }
+        @keyframes fadeFlash { 0%{opacity:0;transform:translateX(-50%) translateY(-8px)} 15%{opacity:1;transform:translateX(-50%) translateY(0)} 70%{opacity:1} 100%{opacity:0} }
         .museo-content {
             display: flex; flex: 1; overflow: hidden; min-height: 0;
         }
@@ -2667,7 +2784,7 @@
         <button class="splash-play-btn" id="playBtn">▶ &nbsp;JUGAR</button>
         <div class="splash-by">Empieza con <span>2.000 monedas</span></div>
         <div style="margin-top:14px;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:2px;">🔧 ACTUALICACION &nbsp;25/ 05 / 2026</div>
-        <div style="margin-top:8px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:2px;">Versión Del Juego Actual #36</div>
+        <div style="margin-top:8px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:2px;">Versión Del Juego Actual #37</div>
     </div>
 </div>
 
@@ -2702,6 +2819,7 @@
             </div>
             <div style="position:relative;flex-shrink:0;"><button id="coinBtn" title="Apostar monedas">🪙</button><div id="coinCooldownLabel"></div></div>
             <button id="museoBtnHeader">🏛️ MI MUSEO</button>
+            <button id="bancoBtnHeader">🏦 BANCO</button>
         </div>
     </header>
 
@@ -3559,7 +3677,7 @@
 
     let currentKey = 'tech';
     let inventory = [];
-    let state = { balance:2000, spent:0, invValue:0, opened:0, best:0, spinning:false, over:false, items:[], commonCount:0, miticoCount:0, consecutiveMiticos:0, lastWasmitico:false, timeInGame:0, gotSuerteMax:false, coinWinStreak:0, coinLoseStreak:0, ruletaCharges:0, miticosForRuleta:0, superRuletaCharges:0, miticosForSuperRuleta:0, hyperRuletaCharges:0, superSpinsForHyper:0, auctionWins:0, universalCount:0, potionsBought:0, pityCount:0, silenceCharges:0 };
+    let state = { balance:2000, spent:0, invValue:0, opened:0, best:0, spinning:false, over:false, items:[], commonCount:0, miticoCount:0, consecutiveMiticos:0, lastWasmitico:false, timeInGame:0, gotSuerteMax:false, coinWinStreak:0, coinLoseStreak:0, ruletaCharges:0, miticosForRuleta:0, superRuletaCharges:0, miticosForSuperRuleta:0, hyperRuletaCharges:0, superSpinsForHyper:0, auctionWins:0, universalCount:0, potionsBought:0, pityCount:0, silenceCharges:0, bankBalance:0, bankLastInterest:0 };
     const WIN_GOAL = 2250000000;
 
     const reel = document.getElementById('caseReel');
@@ -4759,7 +4877,9 @@
                 universalCount: state.universalCount,
                 potionsBought: state.potionsBought,
                 pityCount: state.pityCount,
-                silenceCharges: state.silenceCharges
+                silenceCharges: state.silenceCharges,
+                bankBalance: state.bankBalance,
+                bankLastInterest: state.bankLastInterest
             },
             inventory: inventory,
             museumSlots: museumSlots,
@@ -7167,12 +7287,112 @@
         }
     });
 
-    // Passive museum income every second
+    // Passive museum income + bank interest every second
+    const BANK_INTERVAL_SECS = 600; // 10 minutes
+    const BANK_INTEREST_RATE = 0.005; // 0.5%
     setInterval(() => {
         if (state.over) return;
         calcMuseoStats();
         if (museoIncomePerSec > 0) { state.balance += museoIncomePerSec; updateStats(); }
+        // Bank interest
+        if (state.bankBalance > 0) {
+            const now = Date.now();
+            if (state.bankLastInterest === 0) state.bankLastInterest = now;
+            const elapsed = (now - state.bankLastInterest) / 1000;
+            if (elapsed >= BANK_INTERVAL_SECS) {
+                const interest = Math.floor(state.bankBalance * BANK_INTEREST_RATE);
+                state.bankBalance += interest;
+                state.bankLastInterest = now;
+                renderBanco();
+                showBancoInterestFlash(interest);
+            }
+        }
+        if (document.getElementById('bancoOverlay').classList.contains('open')) {
+            updateBancoTimerBar();
+        }
     }, 1000);
+
+    // ─── BANCO ───────────────────────────────────────────────────────────────────
+    function openBanco() {
+        document.getElementById('bancoOverlay').classList.add('open');
+        renderBanco();
+        updateBancoTimerBar();
+    }
+    function closeBanco() {
+        document.getElementById('bancoOverlay').classList.remove('open');
+    }
+    function renderBanco() {
+        const el = document.getElementById('bancoBalanceVal');
+        const wl = document.getElementById('bancoWalletVal');
+        if (el) el.textContent = fmtNum(state.bankBalance) + '$';
+        if (wl) wl.textContent = fmtNum(state.balance) + '$';
+    }
+    function updateBancoTimerBar() {
+        if (state.bankBalance === 0) {
+            const fill = document.getElementById('bancoTimerFill');
+            const txt  = document.getElementById('bancoTimerText');
+            if (fill) fill.style.width = '0%';
+            if (txt) txt.textContent = 'Deposita para empezar a ganar interés';
+            return;
+        }
+        const now = Date.now();
+        const base = state.bankLastInterest || now;
+        const elapsed = Math.min((now - base) / 1000, BANK_INTERVAL_SECS);
+        const pct = (elapsed / BANK_INTERVAL_SECS) * 100;
+        const remaining = Math.max(0, BANK_INTERVAL_SECS - elapsed);
+        const mins = Math.floor(remaining / 60);
+        const secs = Math.floor(remaining % 60);
+        const fill = document.getElementById('bancoTimerFill');
+        const txt  = document.getElementById('bancoTimerText');
+        if (fill) fill.style.width = pct.toFixed(1) + '%';
+        if (txt)  txt.textContent = `Próximo interés en ${mins}:${String(secs).padStart(2,'0')} · +${fmtNum(Math.floor(state.bankBalance * BANK_INTEREST_RATE))}$`;
+    }
+    function showBancoInterestFlash(amount) {
+        const el = document.createElement('div');
+        el.className = 'banco-interest-flash';
+        el.textContent = `🏦 +${fmtNum(amount)}$ INTERÉS BANCARIO`;
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 3100);
+    }
+    function depositarBanco() {
+        const inp = document.getElementById('bancoDepositInput');
+        let amount = parseInt(inp.value, 10);
+        if (isNaN(amount) || amount <= 0) { inp.value = ''; return; }
+        amount = Math.min(amount, Math.floor(state.balance));
+        if (amount <= 0) return;
+        state.balance -= amount;
+        state.bankBalance += amount;
+        if (state.bankLastInterest === 0) state.bankLastInterest = Date.now();
+        inp.value = '';
+        updateStats();
+        renderBanco();
+        updateBancoTimerBar();
+        saveGame();
+    }
+    function retirarBanco() {
+        const inp = document.getElementById('bancoWithdrawInput');
+        let amount = parseInt(inp.value, 10);
+        if (isNaN(amount) || amount <= 0) { inp.value = ''; return; }
+        amount = Math.min(amount, Math.floor(state.bankBalance));
+        if (amount <= 0) return;
+        state.bankBalance -= amount;
+        state.balance += amount;
+        if (state.bankBalance === 0) state.bankLastInterest = 0;
+        inp.value = '';
+        updateStats();
+        renderBanco();
+        updateBancoTimerBar();
+        saveGame();
+    }
+    function setDepositQuick(fraction) {
+        const val = Math.floor(state.balance * fraction);
+        document.getElementById('bancoDepositInput').value = val > 0 ? val : '';
+    }
+    function setWithdrawQuick(fraction) {
+        const val = Math.floor(state.bankBalance * fraction);
+        document.getElementById('bancoWithdrawInput').value = val > 0 ? val : '';
+    }
+    // ─────────────────────────────────────────────────────────────────────────────
 
     // ─── HTML MUSEO (inyectado en body) ──────────────────────────────────────────
     (function() {
@@ -7224,6 +7444,82 @@
     })();
     document.getElementById('museoBtnHeader').addEventListener('click', openMuseo);
     document.getElementById('museoBackBtn').addEventListener('click', closeMuseo);
+    // ─────────────────────────────────────────────────────────────────────────────
+
+    // ─── HTML BANCO (inyectado en body) ──────────────────────────────────────────
+    (function() {
+        const overlay = document.createElement('div');
+        overlay.id = 'bancoOverlay';
+        overlay.innerHTML = `
+            <div class="banco-topbar">
+                <button id="bancoBackBtn">← VOLVER AL JUEGO</button>
+                <div class="banco-topbar-title">🏦 BANCO — HUCHA DE INTERESES</div>
+            </div>
+            <div class="banco-body">
+                <div class="banco-card">
+                    <div class="banco-icon">🏦</div>
+                    <div class="banco-card-title">HUCHA DE INTERESES</div>
+                    <div class="banco-subtitle">0.5% CADA 10 MINUTOS · DINERO INMOVILIZADO</div>
+
+                    <div class="banco-stats">
+                        <div class="banco-stat">
+                            <div class="banco-stat-label">💰 En el banco</div>
+                            <div class="banco-stat-value" id="bancoBalanceVal">0$</div>
+                        </div>
+                        <div class="banco-stat">
+                            <div class="banco-stat-label">👛 Tu cartera</div>
+                            <div class="banco-stat-value wallet" id="bancoWalletVal">0$</div>
+                        </div>
+                    </div>
+
+                    <div class="banco-timer-bar">
+                        <div class="banco-timer-label">⏱ PRÓXIMO INTERÉS</div>
+                        <div class="banco-timer-track">
+                            <div class="banco-timer-fill" id="bancoTimerFill" style="width:0%"></div>
+                        </div>
+                        <div class="banco-timer-text" id="bancoTimerText">Deposita para empezar a ganar interés</div>
+                    </div>
+
+                    <div class="banco-actions">
+                        <div>
+                            <div style="font-size:11px;letter-spacing:2px;color:#64748b;text-transform:uppercase;margin-bottom:8px;">Depositar</div>
+                            <div class="banco-input-row">
+                                <input class="banco-input" id="bancoDepositInput" type="number" min="1" placeholder="Cantidad a depositar…">
+                                <button class="banco-btn banco-btn-deposit" onclick="depositarBanco()">DEPOSITAR</button>
+                            </div>
+                            <div class="banco-quick-btns" style="margin-top:8px;">
+                                <button class="banco-quick" onclick="setDepositQuick(0.1)">10%</button>
+                                <button class="banco-quick" onclick="setDepositQuick(0.25)">25%</button>
+                                <button class="banco-quick" onclick="setDepositQuick(0.5)">50%</button>
+                                <button class="banco-quick" onclick="setDepositQuick(1)">TODO</button>
+                            </div>
+                        </div>
+                        <div>
+                            <div style="font-size:11px;letter-spacing:2px;color:#64748b;text-transform:uppercase;margin-bottom:8px;">Retirar</div>
+                            <div class="banco-input-row">
+                                <input class="banco-input" id="bancoWithdrawInput" type="number" min="1" placeholder="Cantidad a retirar…">
+                                <button class="banco-btn banco-btn-withdraw" onclick="retirarBanco()">RETIRAR</button>
+                            </div>
+                            <div class="banco-quick-btns" style="margin-top:8px;">
+                                <button class="banco-quick" onclick="setWithdrawQuick(0.1)">10%</button>
+                                <button class="banco-quick" onclick="setWithdrawQuick(0.25)">25%</button>
+                                <button class="banco-quick" onclick="setWithdrawQuick(0.5)">50%</button>
+                                <button class="banco-quick" onclick="setWithdrawQuick(1)">TODO</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="banco-interest-note">
+                        ⚠️ El dinero depositado no puede usarse para comprar cofres, pociones ni apostar.<br>
+                        Retíralo cuando lo necesites, pero perderás el progreso del temporizador si retiras todo.
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+    })();
+    document.getElementById('bancoBtnHeader').addEventListener('click', openBanco);
+    document.getElementById('bancoBackBtn').addEventListener('click', closeBanco);
     // ─────────────────────────────────────────────────────────────────────────────
 
     // ─── PARÁSITOS EN LA INTERFAZ ────────────────────────────────────────────────
