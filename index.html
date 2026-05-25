@@ -2434,6 +2434,189 @@
             50% { box-shadow: 0 0 18px rgba(56,189,248,0.8); }
         }
 
+        /* ── MI MUSEO ─────────────────────────────────────────────── */
+        #museoOverlay {
+            display: none; position: fixed; inset: 0; z-index: 500;
+            background: #05070f; flex-direction: column; overflow: hidden;
+        }
+        #museoOverlay.open { display: flex; }
+        .museo-topbar {
+            display: flex; align-items: center; gap: 14px;
+            padding: 10px 18px; flex-shrink: 0;
+            background: rgba(0,0,0,0.6);
+            border-bottom: 1px solid rgba(251,191,36,0.15);
+        }
+        #museoBackBtn {
+            padding: 7px 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.04); color: #94a3b8;
+            font-family: 'Rajdhani',sans-serif; font-size: 12px;
+            font-weight: 700; letter-spacing: 2px; cursor: pointer; transition: all 0.2s;
+        }
+        #museoBackBtn:hover { background: rgba(255,255,255,0.1); color: white; }
+        .museo-topbar-title {
+            font-family: 'Bebas Neue',sans-serif; font-size: 24px;
+            letter-spacing: 5px; color: #fbbf24;
+            text-shadow: 0 0 20px rgba(251,191,36,0.4);
+        }
+        .museo-topbar-stats { display: flex; gap: 20px; margin-left: auto; }
+        .museo-stat-pill {
+            padding: 5px 14px; border-radius: 20px;
+            font-family: 'Rajdhani',sans-serif; font-size: 13px;
+            font-weight: 700; letter-spacing: 1px;
+        }
+        #museoIncomeDisplay {
+            background: rgba(74,222,128,0.1); border: 1px solid rgba(74,222,128,0.3); color: #4ade80;
+        }
+        #museoVisitorDisplay {
+            background: rgba(96,165,250,0.1); border: 1px solid rgba(96,165,250,0.3); color: #60a5fa;
+        }
+        #museoBtnHeader {
+            padding: 7px 14px; border-radius: 10px; border: 1px solid rgba(251,191,36,0.3);
+            background: rgba(251,191,36,0.08); color: #fbbf24;
+            font-family: 'Rajdhani',sans-serif; font-size: 12px;
+            font-weight: 700; letter-spacing: 2px; cursor: pointer;
+            transition: all 0.2s; white-space: nowrap;
+        }
+        #museoBtnHeader:hover { background: rgba(251,191,36,0.18); box-shadow: 0 0 14px rgba(251,191,36,0.25); }
+        .museo-content {
+            display: flex; flex: 1; overflow: hidden; min-height: 0;
+        }
+        .museo-room {
+            flex: 1; display: flex; flex-direction: column;
+            overflow: hidden; position: relative;
+        }
+        .museo-back-wall {
+            background: linear-gradient(180deg,#06091a 0%,#0d1525 100%);
+            padding: 20px 24px 18px; flex-shrink: 0;
+            border-bottom: 3px solid #1a2540; position: relative;
+        }
+        .museo-back-wall::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(90deg,transparent,#fbbf24 30%,#fbbf24 70%,transparent);
+        }
+        .museo-back-wall::after {
+            content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg,transparent,rgba(251,191,36,0.3),transparent);
+        }
+        .museo-wall-label {
+            font-family: 'Rajdhani',sans-serif; font-size: 9px; font-weight: 700;
+            letter-spacing: 3px; color: rgba(251,191,36,0.4);
+            text-align: center; margin-bottom: 12px; text-transform: uppercase;
+        }
+        .museo-wall-row { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+        .museo-floor-section {
+            flex: 1; overflow: hidden; position: relative;
+            background: linear-gradient(180deg,#080d18 0%,#050810 100%);
+        }
+        .museo-floor-label {
+            font-family: 'Rajdhani',sans-serif; font-size: 9px; font-weight: 700;
+            letter-spacing: 3px; color: rgba(255,255,255,0.15); text-align: center;
+            padding-top: 10px; text-transform: uppercase;
+        }
+        .museo-floor-persp {
+            transform: perspective(700px) rotateX(22deg);
+            transform-origin: top center;
+            display: grid; grid-template-columns: repeat(4,1fr);
+            gap: 14px; padding: 12px 20px 0;
+            background:
+                repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(255,255,255,0.03) 59px,rgba(255,255,255,0.03) 60px),
+                repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(255,255,255,0.03) 59px,rgba(255,255,255,0.03) 60px);
+        }
+        .museo-spot {
+            border: 1.5px dashed rgba(255,255,255,0.1); border-radius: 10px;
+            cursor: pointer; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; transition: all 0.2s;
+            position: relative; padding: 8px; min-height: 80px;
+            background: rgba(255,255,255,0.02);
+        }
+        .museo-spot:hover { border-color: rgba(251,191,36,0.35); background: rgba(251,191,36,0.04); }
+        .museo-spot.occupied { border-style: solid; border-color: rgba(255,255,255,0.18); background: rgba(0,0,0,0.3); }
+        .museo-spot.highlight-empty {
+            border-color: #22c55e; background: rgba(34,197,94,0.07);
+            animation: spotGlow 0.9s ease-in-out infinite;
+        }
+        @keyframes spotGlow {
+            0%,100% { box-shadow: 0 0 14px rgba(34,197,94,0.25); }
+            50%      { box-shadow: 0 0 28px rgba(34,197,94,0.55); }
+        }
+        .museo-spot-wall { min-width: 92px; min-height: 92px; border-radius: 6px; }
+        .museo-spot-label {
+            font-family: 'Rajdhani',sans-serif; font-size: 8px; font-weight: 700;
+            letter-spacing: 2px; text-transform: uppercase;
+            color: rgba(255,255,255,0.18); margin-top: 4px;
+        }
+        .museo-spot-icon { font-size: 30px; line-height: 1; }
+        .museo-spot-name {
+            font-family: 'Rajdhani',sans-serif; font-size: 9px; font-weight: 700;
+            color: rgba(255,255,255,0.75); text-align: center; max-width: 95%;
+            overflow: hidden; text-overflow: ellipsis; white-space: nowrap; letter-spacing: 0.5px;
+        }
+        .museo-spot-price {
+            font-family: 'JetBrains Mono',monospace; font-size: 8px; color: #4ade80; font-weight: 700;
+        }
+        .museo-spot-remove {
+            font-family: 'Rajdhani',sans-serif; font-size: 7px; font-weight: 700;
+            letter-spacing: 1px; color: rgba(244,63,94,0.5); margin-top: 2px;
+        }
+        .museo-visitor-lane {
+            position: absolute; bottom: 0; left: 0; right: 0; height: 40px;
+            pointer-events: none; overflow: hidden;
+        }
+        .museo-visitor {
+            position: absolute; bottom: 4px; font-size: 18px;
+            animation: visitorWalk linear forwards;
+        }
+        @keyframes visitorWalk {
+            from { left: -40px; opacity: 0.9; }
+            to   { left: calc(100% + 40px); opacity: 0.9; }
+        }
+        .museo-panel {
+            width: 196px; flex-shrink: 0;
+            background: rgba(0,0,0,0.35); border-left: 1px solid rgba(255,255,255,0.06);
+            display: flex; flex-direction: column; overflow: hidden;
+        }
+        .museo-panel-title {
+            font-family: 'Bebas Neue',sans-serif; font-size: 15px;
+            letter-spacing: 3px; color: #fbbf24; padding: 12px 14px 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.05); flex-shrink: 0;
+        }
+        .museo-panel-hint {
+            font-family: 'Rajdhani',sans-serif; font-size: 10px;
+            font-weight: 600; letter-spacing: 0.5px; color: #475569;
+            padding: 6px 12px 4px; flex-shrink: 0; line-height: 1.4;
+        }
+        .museo-inv-list {
+            flex: 1; overflow-y: auto; padding: 6px;
+            display: flex; flex-direction: column; gap: 3px;
+        }
+        .museo-inv-list::-webkit-scrollbar { width: 3px; }
+        .museo-inv-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 2px; }
+        .museo-inv-card {
+            display: flex; align-items: center; gap: 8px;
+            padding: 6px 9px; border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.05);
+            background: rgba(255,255,255,0.02); cursor: pointer; transition: all 0.15s;
+        }
+        .museo-inv-card:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.1); }
+        .museo-inv-card.selected {
+            border-color: #22c55e; background: rgba(34,197,94,0.1);
+            box-shadow: 0 0 10px rgba(34,197,94,0.2);
+        }
+        .museo-inv-card.in-museo { opacity: 0.35; cursor: default; }
+        .museo-inv-icon { font-size: 18px; flex-shrink: 0; }
+        .museo-inv-info { flex: 1; overflow: hidden; }
+        .museo-inv-name {
+            font-family: 'Rajdhani',sans-serif; font-size: 11px; font-weight: 700;
+            color: rgba(255,255,255,0.8); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .museo-inv-price {
+            font-family: 'JetBrains Mono',monospace; font-size: 9px; color: #4ade80;
+        }
+        .museo-empty-msg {
+            color: #475569; font-size: 11px; font-family: 'Rajdhani',sans-serif;
+            font-weight: 600; padding: 16px 12px; text-align: center; line-height: 1.5;
+        }
+        /* ──────────────────────────────────────────────────────────── */
         /* ── SUPER MÍTICO: rainbow glow ───────────────────────────── */
         .inv-card-super {
             border-top-width: 3px !important;
@@ -2518,6 +2701,7 @@
                 <div class="balance-amount" id="balance">650</div>
             </div>
             <div style="position:relative;flex-shrink:0;"><button id="coinBtn" title="Apostar monedas">🪙</button><div id="coinCooldownLabel"></div></div>
+            <button id="museoBtnHeader">🏛️ MI MUSEO</button>
         </div>
     </header>
 
@@ -3591,6 +3775,7 @@
         finalPrice = Math.round(finalPrice * mutation.mult);
         const isInfected = Math.random() < 0.10;
         const bonusWinner = { ...winner, price: finalPrice, favorite: false, mutation: mutation.id,
+            _id: Date.now() + Math.floor(Math.random()*99999),
             ...(isInfected ? { infected: true, infectedSince: Date.now(), parasiteUsed: false } : {}) };
         state.invValue += finalPrice;
         if (finalPrice > state.best) state.best = finalPrice;
@@ -3868,6 +4053,8 @@
             '#4ade80', 8
         );
         setTimeout(() => {
+            const soldId = inventory[origIdx] && inventory[origIdx]._id;
+            if (soldId) cleanMuseumSlot(soldId);
             state.balance += salePrice;
             state.invValue -= inventory[origIdx].price;
             if (state.invValue < 0) state.invValue = 0;
@@ -3887,6 +4074,7 @@
         playSound('money');
         createParticles(window.innerWidth/2, window.innerHeight/2, '#4ade80', 25);
         const sellValue = nonFavItems.reduce((sum, item) => sum + item.price, 0);
+        nonFavItems.forEach(item => { if (item._id) cleanMuseumSlot(item._id); });
         state.balance += sellValue;
         state.invValue -= sellValue;
         if (state.invValue < 0) state.invValue = 0;
@@ -4574,6 +4762,7 @@
                 silenceCharges: state.silenceCharges
             },
             inventory: inventory,
+            museumSlots: museumSlots,
             achievements: achievements.map(a => ({ id: a.id, done: a.done })),
             currentKey: currentKey,
             savedAt: Date.now()
@@ -4603,6 +4792,10 @@
             }
             // Restaurar cofre activo
             if (data.currentKey && boxes[data.currentKey]) currentKey = data.currentKey;
+            // Restaurar museo
+            if (data.museumSlots) museumSlots = data.museumSlots;
+            // Asignar _id a items que no tengan
+            inventory.forEach(item => { if (!item._id) item._id = Date.now() + Math.floor(Math.random()*99999); });
             return true;
         } catch(e) { return false; }
     }
@@ -6827,6 +7020,211 @@
     document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
     document.getElementById('musicToggle').addEventListener('click', toggleMusic);
     document.querySelectorAll('.screen-btn').forEach(btn => btn.addEventListener('click', () => location.reload()));
+
+    // ─── MI MUSEO ────────────────────────────────────────────────────────────────
+    const MUSEO_SLOTS = 12;
+    let museumSlots = new Array(MUSEO_SLOTS).fill(null);
+    let selectedMuseoItem = null;
+    let museoIncomePerSec = 0;
+    let museoVisitorTimer = null;
+
+    const VISITOR_EMOJIS = ['🧑‍🎨','👨‍🦳','👩‍🦱','🧑','👨‍🦰','👩','🧓','👴','🧑‍💼','👩‍💼'];
+
+    function openMuseo() {
+        document.getElementById('museoOverlay').classList.add('open');
+        renderMuseo();
+    }
+
+    function closeMuseo() {
+        document.getElementById('museoOverlay').classList.remove('open');
+        if (museoVisitorTimer) clearTimeout(museoVisitorTimer);
+        selectedMuseoItem = null;
+    }
+
+    function cleanMuseumSlot(id) {
+        for (let i = 0; i < museumSlots.length; i++) {
+            if (museumSlots[i] && museumSlots[i]._id === id) museumSlots[i] = null;
+        }
+    }
+
+    function calcMuseoStats() {
+        const total = museumSlots.filter(Boolean).reduce((s, it) => s + it.price, 0);
+        museoIncomePerSec = Math.floor(total * 0.00005);
+        const visitors = Math.min(Math.floor(total / 50000), 25);
+        return { total, visitors };
+    }
+
+    function renderMuseo() {
+        renderMuseoRoom();
+        renderMuseoPanel();
+        updateMuseoHUD();
+        runMuseoVisitors();
+    }
+
+    function renderMuseoRoom() {
+        document.querySelectorAll('.museo-spot').forEach(spot => {
+            const idx = parseInt(spot.getAttribute('data-slot'));
+            const item = museumSlots[idx];
+            spot.classList.remove('occupied', 'highlight-empty');
+            if (item) {
+                spot.classList.add('occupied');
+                const col = (typeof rarities !== 'undefined' && rarities[item.rarity]) ? rarities[item.rarity].color : '#fbbf24';
+                spot.innerHTML = `
+                    <div style="width:100%;display:flex;flex-direction:column;align-items:center;gap:2px;border-top:2px solid ${col};padding-top:5px;">
+                        <div class="museo-spot-icon">${item.icon}</div>
+                        <div class="museo-spot-name">${item.name}</div>
+                        <div class="museo-spot-price">${item.price.toLocaleString()} $</div>
+                    </div>
+                    <div class="museo-spot-remove">✕ RETIRAR</div>
+                `;
+            } else {
+                const label = idx < 4 ? 'VITRINA' : 'PEDESTAL';
+                spot.innerHTML = `<div class="museo-spot-label">${label}</div>`;
+                if (selectedMuseoItem) spot.classList.add('highlight-empty');
+            }
+        });
+    }
+
+    function renderMuseoPanel() {
+        const list = document.getElementById('museoInvList');
+        if (!list) return;
+        list.innerHTML = '';
+        if (!inventory.length) {
+            list.innerHTML = '<div class="museo-empty-msg">Tu colección está vacía.<br>Abre cofres para conseguir objetos.</div>';
+            return;
+        }
+        [...inventory]
+            .map((item, i) => ({ item, i }))
+            .sort((a, b) => b.item.price - a.item.price)
+            .forEach(({ item, i }) => {
+                const inMuseo = museumSlots.some(s => s && s._id === item._id);
+                const isSel = selectedMuseoItem && selectedMuseoItem._id === item._id;
+                const card = document.createElement('div');
+                card.className = 'museo-inv-card' + (inMuseo ? ' in-museo' : '') + (isSel ? ' selected' : '');
+                card.innerHTML = `
+                    <div class="museo-inv-icon">${item.icon}</div>
+                    <div class="museo-inv-info">
+                        <div class="museo-inv-name">${item.name}</div>
+                        <div class="museo-inv-price">${item.price.toLocaleString()} $</div>
+                    </div>
+                `;
+                if (!inMuseo) {
+                    card.addEventListener('click', () => {
+                        if (isSel) {
+                            selectedMuseoItem = null;
+                            document.getElementById('museoPanelHint').textContent = 'Selecciona un objeto para exhibirlo';
+                        } else {
+                            selectedMuseoItem = { ...item };
+                            document.getElementById('museoPanelHint').textContent = `"${item.name}" — toca un pedestal vacío`;
+                        }
+                        renderMuseo();
+                    });
+                }
+                list.appendChild(card);
+            });
+    }
+
+    function updateMuseoHUD() {
+        const { visitors } = calcMuseoStats();
+        document.getElementById('museoIncomeDisplay').textContent = `💰 ${museoIncomePerSec.toLocaleString()} $/s`;
+        document.getElementById('museoVisitorDisplay').textContent = `👥 ${visitors} visitantes`;
+    }
+
+    function runMuseoVisitors() {
+        if (museoVisitorTimer) clearTimeout(museoVisitorTimer);
+        const { visitors } = calcMuseoStats();
+        if (!visitors || !document.getElementById('museoOverlay').classList.contains('open')) return;
+        const lane = document.getElementById('museoVisitorLane');
+        if (!lane) return;
+        const emoji = VISITOR_EMOJIS[Math.floor(Math.random() * VISITOR_EMOJIS.length)];
+        const v = document.createElement('div');
+        const dur = 5000 + Math.random() * 7000;
+        v.className = 'museo-visitor';
+        v.style.cssText = `bottom:${2 + Math.random()*20}px; animation-duration:${dur}ms;`;
+        v.textContent = emoji;
+        lane.appendChild(v);
+        setTimeout(() => v.remove(), dur + 200);
+        const nextSpawn = Math.max(400, Math.floor(10000 / visitors));
+        museoVisitorTimer = setTimeout(runMuseoVisitors, nextSpawn);
+    }
+
+    // Wire up spot clicks
+    document.addEventListener('click', e => {
+        const spot = e.target.closest('.museo-spot');
+        if (!spot) return;
+        const idx = parseInt(spot.getAttribute('data-slot'));
+        if (museumSlots[idx]) {
+            museumSlots[idx] = null;
+            saveGame();
+            selectedMuseoItem = null;
+            renderMuseo();
+        } else if (selectedMuseoItem) {
+            museumSlots[idx] = { ...selectedMuseoItem };
+            selectedMuseoItem = null;
+            document.getElementById('museoPanelHint').textContent = 'Selecciona un objeto para exhibirlo';
+            saveGame();
+            renderMuseo();
+        }
+    });
+
+    // Passive museum income every second
+    setInterval(() => {
+        if (state.over) return;
+        calcMuseoStats();
+        if (museoIncomePerSec > 0) { state.balance += museoIncomePerSec; updateStats(); }
+    }, 1000);
+
+    // ─── HTML MUSEO (inyectado en body) ──────────────────────────────────────────
+    (function() {
+        const overlay = document.createElement('div');
+        overlay.id = 'museoOverlay';
+        overlay.innerHTML = `
+            <div class="museo-topbar">
+                <button id="museoBackBtn">← VOLVER AL JUEGO</button>
+                <div class="museo-topbar-title">🏛️ MI MUSEO</div>
+                <div class="museo-topbar-stats">
+                    <div class="museo-stat-pill" id="museoIncomeDisplay">💰 0 $/s</div>
+                    <div class="museo-stat-pill" id="museoVisitorDisplay">👥 0 visitantes</div>
+                </div>
+            </div>
+            <div class="museo-content">
+                <div class="museo-room">
+                    <div class="museo-back-wall">
+                        <div class="museo-wall-label">⬛ VITRINAS DE PARED</div>
+                        <div class="museo-wall-row">
+                            <div class="museo-spot museo-spot-wall" data-slot="0"><div class="museo-spot-label">VITRINA</div></div>
+                            <div class="museo-spot museo-spot-wall" data-slot="1"><div class="museo-spot-label">VITRINA</div></div>
+                            <div class="museo-spot museo-spot-wall" data-slot="2"><div class="museo-spot-label">VITRINA</div></div>
+                            <div class="museo-spot museo-spot-wall" data-slot="3"><div class="museo-spot-label">VITRINA</div></div>
+                        </div>
+                    </div>
+                    <div class="museo-floor-section">
+                        <div class="museo-floor-label">🏛️ PEDESTALES DE EXPOSICIÓN</div>
+                        <div class="museo-floor-persp">
+                            <div class="museo-spot museo-spot-pedestal" data-slot="4"><div class="museo-spot-label">PEDESTAL</div></div>
+                            <div class="museo-spot museo-spot-pedestal" data-slot="5"><div class="museo-spot-label">PEDESTAL</div></div>
+                            <div class="museo-spot museo-spot-pedestal" data-slot="6"><div class="museo-spot-label">PEDESTAL</div></div>
+                            <div class="museo-spot museo-spot-pedestal" data-slot="7"><div class="museo-spot-label">PEDESTAL</div></div>
+                            <div class="museo-spot museo-spot-pedestal" data-slot="8"><div class="museo-spot-label">PEDESTAL</div></div>
+                            <div class="museo-spot museo-spot-pedestal" data-slot="9"><div class="museo-spot-label">PEDESTAL</div></div>
+                            <div class="museo-spot museo-spot-pedestal" data-slot="10"><div class="museo-spot-label">PEDESTAL</div></div>
+                            <div class="museo-spot museo-spot-pedestal" data-slot="11"><div class="museo-spot-label">PEDESTAL</div></div>
+                        </div>
+                        <div class="museo-visitor-lane" id="museoVisitorLane"></div>
+                    </div>
+                </div>
+                <div class="museo-panel">
+                    <div class="museo-panel-title">🎒 COLECCIÓN</div>
+                    <div class="museo-panel-hint" id="museoPanelHint">Selecciona un objeto para exhibirlo</div>
+                    <div class="museo-inv-list" id="museoInvList"></div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+    })();
+    document.getElementById('museoBtnHeader').addEventListener('click', openMuseo);
+    document.getElementById('museoBackBtn').addEventListener('click', closeMuseo);
+    // ─────────────────────────────────────────────────────────────────────────────
 
     // ─── PARÁSITOS EN LA INTERFAZ ────────────────────────────────────────────────
     // Crear elementos de parásitos en el DOM
