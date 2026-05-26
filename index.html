@@ -2498,123 +2498,102 @@
             transition: all 0.2s; white-space: nowrap;
         }
         #museoBtnHeader:hover { background: rgba(251,191,36,0.18); box-shadow: 0 0 14px rgba(251,191,36,0.25); }
-        /* ── BANCO ─────────────────────────────────────────────────────── */
-        #bancoBtnHeader {
-            padding: 7px 14px; border-radius: 10px; border: 1px solid rgba(52,211,153,0.3);
-            background: rgba(52,211,153,0.08); color: #34d399;
+        @keyframes fadeFlash { 0%{opacity:0;transform:translateX(-50%) translateY(-8px)} 15%{opacity:1;transform:translateX(-50%) translateY(0)} 70%{opacity:1} 100%{opacity:0} }
+        /* ── RULETA DE CASINO ──────────────────────────────────────────── */
+        #ruletaBtnHeader {
+            padding: 7px 14px; border-radius: 10px; border: 1px solid rgba(220,38,38,0.35);
+            background: rgba(220,38,38,0.1); color: #f87171;
             font-family: 'Rajdhani',sans-serif; font-size: 12px;
             font-weight: 700; letter-spacing: 2px; cursor: pointer;
             transition: all 0.2s; white-space: nowrap;
         }
-        #bancoBtnHeader:hover { background: rgba(52,211,153,0.18); box-shadow: 0 0 14px rgba(52,211,153,0.25); }
-        #bancoOverlay {
+        #ruletaBtnHeader:hover { background: rgba(220,38,38,0.2); box-shadow: 0 0 14px rgba(220,38,38,0.3); }
+        #ruletaCasinoOverlay {
             display: none; position: fixed; inset: 0; z-index: 9000;
-            background: #050a10;
-            flex-direction: column; overflow: hidden;
+            background: #08080e; flex-direction: column; overflow: hidden;
         }
-        #bancoOverlay.open { display: flex; }
-        .banco-topbar {
-            display: flex; align-items: center; gap: 14px;
-            padding: 12px 20px; background: rgba(0,0,0,0.5);
-            border-bottom: 1px solid rgba(52,211,153,0.15); flex-shrink: 0;
+        #ruletaCasinoOverlay.open { display: flex; }
+        .ruleta-casino-topbar {
+            display: flex; align-items: center; gap: 14px; padding: 10px 20px;
+            background: rgba(0,0,0,0.6); border-bottom: 1px solid rgba(220,38,38,0.2); flex-shrink: 0;
         }
-        .banco-topbar-title {
+        .ruleta-casino-title {
             font-family: 'Rajdhani',sans-serif; font-size: 17px; font-weight: 700;
-            letter-spacing: 3px; color: #34d399; flex: 1;
+            letter-spacing: 3px; color: #f87171; flex: 1;
         }
-        #bancoBackBtn {
-            padding: 6px 16px; border-radius: 8px; border: 1px solid rgba(52,211,153,0.25);
-            background: rgba(52,211,153,0.07); color: #34d399;
+        #ruletaCasinoBackBtn {
+            padding: 6px 16px; border-radius: 8px; border: 1px solid rgba(220,38,38,0.25);
+            background: rgba(220,38,38,0.07); color: #f87171;
             font-family: 'Rajdhani',sans-serif; font-size: 13px; font-weight: 700;
             letter-spacing: 1px; cursor: pointer; transition: all 0.2s;
         }
-        #bancoBackBtn:hover { background: rgba(52,211,153,0.18); }
-        .banco-body {
+        #ruletaCasinoBackBtn:hover { background: rgba(220,38,38,0.18); }
+        .ruleta-casino-body {
             flex: 1; display: flex; align-items: center; justify-content: center;
-            padding: 30px 20px; overflow-y: auto;
+            gap: 36px; padding: 20px; overflow: hidden;
         }
-        .banco-card {
-            background: rgba(10,20,15,0.95); border: 1px solid rgba(52,211,153,0.2);
-            border-radius: 20px; padding: 36px 42px; max-width: 560px; width: 100%;
-            box-shadow: 0 0 60px rgba(52,211,153,0.06);
+        .ruleta-wheel-col {
+            display: flex; flex-direction: column; align-items: center; gap: 0; flex-shrink: 0; position: relative;
         }
-        .banco-icon { font-size: 52px; text-align: center; margin-bottom: 6px; }
-        .banco-card-title {
-            font-family: 'Rajdhani',sans-serif; font-size: 22px; font-weight: 700;
-            letter-spacing: 3px; color: #34d399; text-align: center; margin-bottom: 4px;
+        #ruletaCanvas { border-radius: 50%; box-shadow: 0 0 60px rgba(220,38,38,0.3), 0 0 120px rgba(0,0,0,0.8); display: block; }
+        .ruleta-pointer {
+            position: absolute; top: -4px; left: 50%; transform: translateX(-50%);
+            font-size: 28px; color: #fbbf24; filter: drop-shadow(0 0 8px rgba(251,191,36,0.8));
+            line-height: 1; pointer-events: none; z-index: 2;
         }
-        .banco-subtitle {
-            font-size: 12px; color: #64748b; text-align: center; letter-spacing: 1px;
-            margin-bottom: 28px;
+        .ruleta-bet-col {
+            display: flex; flex-direction: column; gap: 14px; min-width: 340px; max-width: 400px;
         }
-        .banco-stats {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 28px;
+        .ruleta-selected-display {
+            font-family: 'Rajdhani',sans-serif; font-size: 18px; font-weight: 700; letter-spacing: 2px;
+            color: #fbbf24; background: rgba(251,191,36,0.07); border: 1px solid rgba(251,191,36,0.2);
+            border-radius: 10px; padding: 10px 16px; text-align: center;
         }
-        .banco-stat {
-            background: rgba(0,0,0,0.4); border: 1px solid rgba(52,211,153,0.12);
-            border-radius: 12px; padding: 14px 16px; text-align: center;
+        .ruleta-num-grid {
+            display: grid; grid-template-columns: repeat(10, 1fr); gap: 4px;
         }
-        .banco-stat-label {
-            font-size: 10px; letter-spacing: 2px; color: #64748b;
-            text-transform: uppercase; margin-bottom: 6px;
+        .ruleta-num-btn {
+            aspect-ratio: 1; border: none; border-radius: 5px; font-size: 11px; font-weight: 700;
+            cursor: pointer; transition: all 0.15s; color: white;
+            display: flex; align-items: center; justify-content: center;
         }
-        .banco-stat-value {
-            font-family: 'JetBrains Mono',monospace; font-size: 18px; font-weight: 700; color: #34d399;
+        .ruleta-num-btn.red   { background: #dc2626; }
+        .ruleta-num-btn.black { background: #1e293b; border: 1px solid #334155; }
+        .ruleta-num-btn.green { background: #15803d; grid-column: span 2; aspect-ratio: unset; padding: 6px; }
+        .ruleta-num-btn:hover { transform: scale(1.15); filter: brightness(1.3); z-index: 1; position: relative; }
+        .ruleta-num-btn.selected { outline: 3px solid #fbbf24; transform: scale(1.15); filter: brightness(1.4); z-index: 2; position: relative; }
+        .ruleta-bet-area { display: flex; flex-direction: column; gap: 8px; }
+        .ruleta-bet-input {
+            width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(220,38,38,0.25); border-radius: 10px; padding: 10px 14px;
+            color: #e2e8f0; font-family: 'JetBrains Mono',monospace; font-size: 14px; outline: none;
         }
-        .banco-stat-value.wallet { color: #60a5fa; }
-        .banco-timer-bar {
-            background: rgba(0,0,0,0.4); border: 1px solid rgba(52,211,153,0.12);
-            border-radius: 12px; padding: 14px 16px; margin-bottom: 28px; text-align: center;
+        .ruleta-bet-input:focus { border-color: rgba(220,38,38,0.55); }
+        .ruleta-quick-row { display: flex; gap: 6px; }
+        .ruleta-quick-row button {
+            flex: 1; padding: 6px 0; border-radius: 8px; border: 1px solid rgba(220,38,38,0.2);
+            background: rgba(220,38,38,0.07); color: #f87171; font-size: 12px; font-weight: 700;
+            cursor: pointer; transition: all 0.15s; font-family: 'Rajdhani',sans-serif;
         }
-        .banco-timer-label { font-size: 10px; letter-spacing: 2px; color: #64748b; text-transform: uppercase; margin-bottom: 6px; }
-        .banco-timer-track {
-            background: rgba(255,255,255,0.05); border-radius: 99px; height: 8px; margin-bottom: 6px; overflow: hidden;
+        .ruleta-quick-row button:hover { background: rgba(220,38,38,0.18); }
+        #ruletaCasinoSpinBtn {
+            padding: 13px; border-radius: 12px; border: none; cursor: pointer;
+            background: linear-gradient(135deg,#991b1b,#dc2626); color: white;
+            font-family: 'Bebas Neue',sans-serif; font-size: 22px; letter-spacing: 4px;
+            font-weight: 700; transition: all 0.2s;
+            box-shadow: 0 0 30px rgba(220,38,38,0.4), 0 8px 24px rgba(0,0,0,0.4);
         }
-        .banco-timer-fill {
-            height: 100%; background: linear-gradient(90deg,#34d399,#10b981);
-            border-radius: 99px; transition: width 1s linear;
+        #ruletaCasinoSpinBtn:hover { background: linear-gradient(135deg,#b91c1c,#ef4444); box-shadow: 0 0 50px rgba(220,38,38,0.6); transform: translateY(-2px); }
+        #ruletaCasinoSpinBtn:disabled { opacity: 0.4; pointer-events: none; }
+        .ruleta-odds { font-size: 11px; color: #475569; text-align: center; letter-spacing: 1px; }
+        .ruleta-casino-result {
+            padding: 12px 16px; border-radius: 10px; font-family: 'Rajdhani',sans-serif;
+            font-size: 16px; font-weight: 700; letter-spacing: 2px; text-align: center;
+            min-height: 48px; display: flex; align-items: center; justify-content: center;
         }
-        .banco-timer-text { font-family: 'JetBrains Mono',monospace; font-size: 13px; color: #34d399; }
-        .banco-actions { display: flex; flex-direction: column; gap: 16px; }
-        .banco-input-row {
-            display: flex; gap: 10px; align-items: center;
-        }
-        .banco-input {
-            flex: 1; background: rgba(0,0,0,0.5); border: 1px solid rgba(52,211,153,0.2);
-            border-radius: 10px; padding: 10px 14px; color: #e2e8f0;
-            font-family: 'JetBrains Mono',monospace; font-size: 14px; outline: none;
-        }
-        .banco-input:focus { border-color: rgba(52,211,153,0.5); }
-        .banco-btn {
-            padding: 10px 20px; border-radius: 10px; border: none; cursor: pointer;
-            font-family: 'Rajdhani',sans-serif; font-size: 14px; font-weight: 700;
-            letter-spacing: 1.5px; transition: all 0.2s; white-space: nowrap;
-        }
-        .banco-btn-deposit {
-            background: linear-gradient(135deg,#065f46,#047857); color: #a7f3d0;
-            border: 1px solid rgba(52,211,153,0.3);
-        }
-        .banco-btn-deposit:hover { background: linear-gradient(135deg,#047857,#059669); box-shadow: 0 0 16px rgba(52,211,153,0.25); }
-        .banco-btn-withdraw {
-            background: linear-gradient(135deg,#1e3a5f,#1e40af); color: #93c5fd;
-            border: 1px solid rgba(96,165,250,0.3);
-        }
-        .banco-btn-withdraw:hover { background: linear-gradient(135deg,#1e40af,#2563eb); box-shadow: 0 0 16px rgba(96,165,250,0.2); }
-        .banco-quick-btns { display: flex; gap: 8px; flex-wrap: wrap; }
-        .banco-quick { padding: 5px 12px; border-radius: 8px; border: 1px solid rgba(52,211,153,0.2); background: rgba(52,211,153,0.06); color: #34d399; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.15s; }
-        .banco-quick:hover { background: rgba(52,211,153,0.15); }
-        .banco-interest-note {
-            text-align: center; font-size: 11px; color: #475569; margin-top: 16px; letter-spacing: 1px;
-        }
-        .banco-interest-flash {
-            position: fixed; top: 70px; left: 50%; transform: translateX(-50%);
-            background: linear-gradient(135deg,#065f46,#047857); color: #a7f3d0;
-            padding: 10px 24px; border-radius: 12px; font-family: 'Rajdhani',sans-serif;
-            font-size: 15px; font-weight: 700; letter-spacing: 2px;
-            box-shadow: 0 4px 24px rgba(52,211,153,0.3); z-index: 9999;
-            animation: fadeFlash 3s forwards;
-        }
-        @keyframes fadeFlash { 0%{opacity:0;transform:translateX(-50%) translateY(-8px)} 15%{opacity:1;transform:translateX(-50%) translateY(0)} 70%{opacity:1} 100%{opacity:0} }
+        .ruleta-casino-result.win  { background: rgba(21,128,61,0.15); border: 1px solid rgba(34,197,94,0.3); color: #4ade80; }
+        .ruleta-casino-result.lose { background: rgba(127,29,29,0.15); border: 1px solid rgba(220,38,38,0.3); color: #f87171; }
+        .ruleta-casino-result.warn { background: rgba(146,64,14,0.15); border: 1px solid rgba(251,191,36,0.3); color: #fbbf24; }
         .museo-content {
             display: flex; flex: 1; overflow: hidden; min-height: 0;
         }
@@ -2800,11 +2779,11 @@
             <div style="font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:1px;line-height:1.5;">☕ Si hos gusta el juego donarme 2€ en cafeina por favor si no lo haceis voy a subir el precio del cofre cerave un 500% por avariciosos.</div>
         </div>
         <div class="splash-title">THE BEST<br><span>COLLECTOR</span></div>
-        <div class="splash-subtitle">By Aritz &nbsp;·&nbsp; Llega a 2.200.000.000 monedas</div>
+        <div class="splash-subtitle">By Aritz &nbsp;·&nbsp; Llega a 500.000.000.000 monedas</div>
         <button class="splash-play-btn" id="playBtn">▶ &nbsp;JUGAR</button>
         <div class="splash-by">Empieza con <span>2.000 monedas</span></div>
         <div style="margin-top:14px;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:2px;">🔧 ACTUALICACION &nbsp;25/ 05 / 2026</div>
-        <div style="margin-top:8px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:2px;">Versión Del Juego Actual #38</div>
+        <div style="margin-top:8px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:2px;">Versión Del Juego Actual #40</div>
     </div>
 </div>
 
@@ -2822,7 +2801,7 @@
     <header>
         <div>
             <div class="header-title">THE BEST <span id="titleTheme">COLLECTOR</span></div>
-            <div class="header-sub">Meta: 2.200.000.000 monedas · By Aritz</div>
+            <div class="header-sub">Meta: 500.000.000.000 monedas · By Aritz</div>
         </div>
         <div style="display:flex;align-items:center;gap:20px;" id="header-right">
             <div id="bonusBox" style="text-align:center;">
@@ -2839,7 +2818,7 @@
             </div>
             <div style="position:relative;flex-shrink:0;"><button id="coinBtn" title="Apostar monedas">🪙</button><div id="coinCooldownLabel"></div></div>
             <button id="museoBtnHeader">🏛️ MI MUSEO</button>
-            <button id="bancoBtnHeader">🏦 BANCO</button>
+            <button id="ruletaBtnHeader">🎰 RULETA</button>
         </div>
     </header>
 
@@ -3697,8 +3676,8 @@
 
     let currentKey = 'tech';
     let inventory = [];
-    let state = { balance:2000, spent:0, invValue:0, opened:0, best:0, spinning:false, over:false, items:[], commonCount:0, miticoCount:0, consecutiveMiticos:0, lastWasmitico:false, timeInGame:0, gotSuerteMax:false, coinWinStreak:0, coinLoseStreak:0, ruletaCharges:0, miticosForRuleta:0, superRuletaCharges:0, miticosForSuperRuleta:0, hyperRuletaCharges:0, superSpinsForHyper:0, auctionWins:0, universalCount:0, potionsBought:0, pityCount:0, silenceCharges:0, bankBalance:0, bankLastInterest:0 };
-    const WIN_GOAL = 2250000000;
+    let state = { balance:2000, spent:0, invValue:0, opened:0, best:0, spinning:false, over:false, items:[], commonCount:0, miticoCount:0, consecutiveMiticos:0, lastWasmitico:false, timeInGame:0, gotSuerteMax:false, coinWinStreak:0, coinLoseStreak:0, ruletaCharges:0, miticosForRuleta:0, superRuletaCharges:0, miticosForSuperRuleta:0, hyperRuletaCharges:0, superSpinsForHyper:0, auctionWins:0, universalCount:0, potionsBought:0, pityCount:0, silenceCharges:0, };
+    const WIN_GOAL = 500000000000;
 
     const reel = document.getElementById('caseReel');
     const spinBtn = document.getElementById('spinBtn');
@@ -4967,9 +4946,7 @@
                 universalCount: state.universalCount,
                 potionsBought: state.potionsBought,
                 pityCount: state.pityCount,
-                silenceCharges: state.silenceCharges,
-                bankBalance: state.bankBalance,
-                bankLastInterest: state.bankLastInterest
+                silenceCharges: state.silenceCharges
             },
             inventory: inventory,
             museumSlots: museumSlots,
@@ -7377,111 +7354,222 @@
         }
     });
 
-    // Passive museum income + bank interest every second
-    const BANK_INTERVAL_SECS = 600; // 10 minutes
-    const BANK_INTEREST_RATE = 0.005; // 0.5%
+    // Passive museum income every second
     setInterval(() => {
         if (state.over) return;
         calcMuseoStats();
         if (museoIncomePerSec > 0) { state.balance += museoIncomePerSec; updateStats(); }
-        // Bank interest
-        if (state.bankBalance > 0) {
-            const now = Date.now();
-            if (state.bankLastInterest === 0) state.bankLastInterest = now;
-            const elapsed = (now - state.bankLastInterest) / 1000;
-            if (elapsed >= BANK_INTERVAL_SECS) {
-                const interest = Math.floor(state.bankBalance * BANK_INTEREST_RATE);
-                state.bankBalance += interest;
-                state.bankLastInterest = now;
-                renderBanco();
-                showBancoInterestFlash(interest);
-            }
-        }
-        if (document.getElementById('bancoOverlay').classList.contains('open')) {
-            updateBancoTimerBar();
-        }
     }, 1000);
 
-    // ─── BANCO ───────────────────────────────────────────────────────────────────
-    function openBanco() {
-        document.getElementById('bancoOverlay').classList.add('open');
-        renderBanco();
-        updateBancoTimerBar();
+    // ─── RULETA DE CASINO ────────────────────────────────────────────────────────
+    const RULETA_WHEEL_ORDER = [0,32,15,19,4,21,2,25,17,34,6,27,13,36,11,30,8,23,10,5,24,16,33,1,20,14,31,9,22,18,29,7,28,12,35,3,26];
+    const RULETA_REDS = new Set([1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36]);
+    let ruletaSpinning = false;
+    let ruletaCurrentRot = 0;
+    let ruletaAnimFrame = null;
+    let ruletaSelectedNum = null;
+    let ruletaLastBet = 0;
+
+    function getSlotColor(n) {
+        if (n === 0) return '#15803d';
+        return RULETA_REDS.has(n) ? '#c81e1e' : '#111827';
     }
-    function closeBanco() {
-        document.getElementById('bancoOverlay').classList.remove('open');
-    }
-    function renderBanco() {
-        const el = document.getElementById('bancoBalanceVal');
-        const wl = document.getElementById('bancoWalletVal');
-        if (el) el.textContent = fmtNum(state.bankBalance) + '$';
-        if (wl) wl.textContent = fmtNum(state.balance) + '$';
-    }
-    function updateBancoTimerBar() {
-        if (state.bankBalance === 0) {
-            const fill = document.getElementById('bancoTimerFill');
-            const txt  = document.getElementById('bancoTimerText');
-            if (fill) fill.style.width = '0%';
-            if (txt) txt.textContent = 'Deposita para empezar a ganar interés';
-            return;
+
+    function drawRuletaWheel(canvas, rot) {
+        const ctx = canvas.getContext('2d');
+        const W = canvas.width, H = canvas.height;
+        const cx = W / 2, cy = H / 2;
+        const R = Math.min(W, H) / 2 - 6;
+        const N = 37;
+        const slice = (2 * Math.PI) / N;
+        ctx.clearRect(0, 0, W, H);
+
+        // Outer golden rim
+        ctx.beginPath(); ctx.arc(cx, cy, R + 5, 0, 2 * Math.PI);
+        ctx.fillStyle = '#92400e'; ctx.fill();
+        ctx.beginPath(); ctx.arc(cx, cy, R + 5, 0, 2 * Math.PI);
+        ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 3; ctx.stroke();
+
+        for (let i = 0; i < N; i++) {
+            const a0 = rot + i * slice;
+            const a1 = a0 + slice;
+            ctx.beginPath();
+            ctx.moveTo(cx, cy);
+            ctx.arc(cx, cy, R, a0, a1);
+            ctx.closePath();
+            ctx.fillStyle = getSlotColor(RULETA_WHEEL_ORDER[i]);
+            ctx.fill();
+            ctx.strokeStyle = '#fbbf24';
+            ctx.lineWidth = 0.8;
+            ctx.stroke();
+
+            // Number label
+            const mid = a0 + slice / 2;
+            const tx = cx + R * 0.78 * Math.cos(mid);
+            const ty = cy + R * 0.78 * Math.sin(mid);
+            ctx.save();
+            ctx.translate(tx, ty);
+            ctx.rotate(mid + Math.PI / 2);
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 9px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(RULETA_WHEEL_ORDER[i], 0, 0);
+            ctx.restore();
         }
-        const now = Date.now();
-        const base = state.bankLastInterest || now;
-        const elapsed = Math.min((now - base) / 1000, BANK_INTERVAL_SECS);
-        const pct = (elapsed / BANK_INTERVAL_SECS) * 100;
-        const remaining = Math.max(0, BANK_INTERVAL_SECS - elapsed);
-        const mins = Math.floor(remaining / 60);
-        const secs = Math.floor(remaining % 60);
-        const fill = document.getElementById('bancoTimerFill');
-        const txt  = document.getElementById('bancoTimerText');
-        if (fill) fill.style.width = pct.toFixed(1) + '%';
-        if (txt)  txt.textContent = `Próximo interés en ${mins}:${String(secs).padStart(2,'0')} · +${fmtNum(Math.floor(state.bankBalance * BANK_INTEREST_RATE))}$`;
+
+        // Inner separation ring
+        ctx.beginPath(); ctx.arc(cx, cy, R * 0.18, 0, 2 * Math.PI);
+        ctx.fillStyle = '#78350f'; ctx.fill();
+        ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 2; ctx.stroke();
     }
-    function showBancoInterestFlash(amount) {
-        const el = document.createElement('div');
-        el.className = 'banco-interest-flash';
-        el.textContent = `🏦 +${fmtNum(amount)}$ INTERÉS BANCARIO`;
-        document.body.appendChild(el);
-        setTimeout(() => el.remove(), 3100);
+
+    function drawRuletaBall(ctx, cx, cy, R, ballAngle) {
+        const br = R * 0.86;
+        const bx = cx + br * Math.cos(ballAngle);
+        const by = cy + br * Math.sin(ballAngle);
+        ctx.beginPath(); ctx.arc(bx, by, 7, 0, 2 * Math.PI);
+        ctx.fillStyle = '#f1f5f9'; ctx.fill();
+        ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 1.5; ctx.stroke();
+        ctx.beginPath(); ctx.arc(bx - 2, by - 2, 2.5, 0, 2 * Math.PI);
+        ctx.fillStyle = 'rgba(255,255,255,0.8)'; ctx.fill();
     }
-    function depositarBanco() {
-        const inp = document.getElementById('bancoDepositInput');
-        let amount = parseInt(inp.value, 10);
-        if (isNaN(amount) || amount <= 0) { inp.value = ''; return; }
-        amount = Math.min(amount, Math.floor(state.balance));
-        if (amount <= 0) return;
-        state.balance -= amount;
-        state.bankBalance += amount;
-        if (state.bankLastInterest === 0) state.bankLastInterest = Date.now();
-        inp.value = '';
+
+    function openRuletaCasino() {
+        document.getElementById('ruletaCasinoOverlay').classList.add('open');
+        renderRuletaNumbers();
+        const canvas = document.getElementById('ruletaCanvas');
+        drawRuletaWheel(canvas, ruletaCurrentRot);
+        // Draw ball at top
+        const ctx = canvas.getContext('2d');
+        const R = Math.min(canvas.width, canvas.height) / 2 - 6;
+        drawRuletaBall(ctx, canvas.width / 2, canvas.height / 2, R, -Math.PI / 2);
+    }
+
+    function closeRuletaCasino() {
+        document.getElementById('ruletaCasinoOverlay').classList.remove('open');
+        if (ruletaAnimFrame) { cancelAnimationFrame(ruletaAnimFrame); ruletaAnimFrame = null; }
+    }
+
+    function renderRuletaNumbers() {
+        const grid = document.getElementById('ruletaNumGrid');
+        if (!grid || grid.children.length > 0) return;
+        // 0 first (green, wider)
+        const zero = document.createElement('button');
+        zero.className = 'ruleta-num-btn green';
+        zero.dataset.n = 0;
+        zero.textContent = '0';
+        zero.addEventListener('click', () => selectRuletaNum(0));
+        grid.appendChild(zero);
+        // 1–36
+        for (let i = 1; i <= 36; i++) {
+            const btn = document.createElement('button');
+            btn.className = 'ruleta-num-btn ' + (RULETA_REDS.has(i) ? 'red' : 'black');
+            btn.dataset.n = i;
+            btn.textContent = i;
+            btn.addEventListener('click', () => selectRuletaNum(i));
+            grid.appendChild(btn);
+        }
+    }
+
+    function selectRuletaNum(n) {
+        ruletaSelectedNum = n;
+        document.querySelectorAll('.ruleta-num-btn').forEach(b => b.classList.toggle('selected', +b.dataset.n === n));
+        document.getElementById('ruletaSelectedDisplay').textContent = '🎯 Número elegido: ' + n;
+    }
+
+    function spinRuletaCasino() {
+        if (ruletaSpinning) return;
+        if (ruletaSelectedNum === null) { showRuletaMsg('⚠️ Elige un número primero', 'warn'); return; }
+        const betInp = document.getElementById('ruletaBetInput');
+        const bet = parseInt(betInp.value, 10);
+        if (isNaN(bet) || bet <= 0) { showRuletaMsg('⚠️ Introduce una apuesta válida', 'warn'); return; }
+        if (bet > state.balance) { showRuletaMsg('⚠️ Saldo insuficiente', 'warn'); return; }
+
+        state.balance -= bet;
+        ruletaLastBet = bet;
         updateStats();
-        renderBanco();
-        updateBancoTimerBar();
-        saveGame();
+        ruletaSpinning = true;
+        document.getElementById('ruletaCasinoSpinBtn').disabled = true;
+        showRuletaMsg('', '');
+
+        const resultIdx = Math.floor(Math.random() * 37);
+        const resultNum = RULETA_WHEEL_ORDER[resultIdx];
+
+        const sliceAngle = (2 * Math.PI) / 37;
+        const spins = 8 + Math.floor(Math.random() * 5);
+        // Target: winning slot under pointer (top = -PI/2)
+        const targetFinalRot = -Math.PI / 2 - resultIdx * sliceAngle - sliceAngle / 2 + (Math.random() - 0.5) * sliceAngle * 0.4;
+        const startRot = ruletaCurrentRot;
+        let finalRot = targetFinalRot;
+        const needed = startRot + spins * 2 * Math.PI;
+        while (finalRot < needed) finalRot += 2 * Math.PI;
+        const totalWheelRot = finalRot - startRot;
+
+        // Ball: counter-clockwise, total spins + extra
+        const ballTotalRot = -(spins + 4) * 2 * Math.PI;
+        const ballStartAngle = -Math.PI / 2;
+
+        const duration = 5500 + Math.random() * 1500;
+        const startTime = performance.now();
+
+        const canvas = document.getElementById('ruletaCanvas');
+        const ctx = canvas.getContext('2d');
+        const cx = canvas.width / 2, cy = canvas.height / 2;
+        const R = Math.min(canvas.width, canvas.height) / 2 - 6;
+
+        function animate(now) {
+            const elapsed = now - startTime;
+            const t = Math.min(elapsed / duration, 1);
+            const easeWheel = 1 - Math.pow(1 - t, 3);
+            const easeBall  = 1 - Math.pow(1 - Math.min(elapsed / (duration * 0.92), 1), 2.5);
+
+            ruletaCurrentRot = startRot + totalWheelRot * easeWheel;
+            const ballAngle = ballStartAngle + ballTotalRot * easeBall;
+
+            drawRuletaWheel(canvas, ruletaCurrentRot);
+            drawRuletaBall(ctx, cx, cy, R, ballAngle);
+
+            if (t < 1) {
+                ruletaAnimFrame = requestAnimationFrame(animate);
+            } else {
+                ruletaSpinning = false;
+                document.getElementById('ruletaCasinoSpinBtn').disabled = false;
+                ruletaCurrentRot = finalRot;
+                drawRuletaWheel(canvas, ruletaCurrentRot);
+                drawRuletaBall(ctx, cx, cy, R, -Math.PI / 2);
+                resolveRuletaResult(resultNum);
+            }
+        }
+        ruletaAnimFrame = requestAnimationFrame(animate);
     }
-    function retirarBanco() {
-        const inp = document.getElementById('bancoWithdrawInput');
-        let amount = parseInt(inp.value, 10);
-        if (isNaN(amount) || amount <= 0) { inp.value = ''; return; }
-        amount = Math.min(amount, Math.floor(state.bankBalance));
-        if (amount <= 0) return;
-        state.bankBalance -= amount;
-        state.balance += amount;
-        if (state.bankBalance === 0) state.bankLastInterest = 0;
-        inp.value = '';
-        updateStats();
-        renderBanco();
-        updateBancoTimerBar();
-        saveGame();
+
+    function resolveRuletaResult(resultNum) {
+        if (resultNum === ruletaSelectedNum) {
+            const prize = ruletaLastBet * 55;
+            state.balance += prize;
+            updateStats(); saveGame();
+            showRuletaMsg('🎉 ¡GANASTE! El ' + resultNum + ' — +' + fmtNum(prize) + '$', 'win');
+        } else {
+            saveGame();
+            showRuletaMsg('💀 ¡PERDISTE! Salió el ' + resultNum + ' · -' + fmtNum(ruletaLastBet) + '$', 'lose');
+        }
     }
-    function setDepositQuick(fraction) {
+
+    function showRuletaMsg(msg, type) {
+        const el = document.getElementById('ruletaCasinoResult');
+        if (!el) return;
+        el.textContent = msg;
+        el.className = 'ruleta-casino-result' + (type ? ' ' + type : '');
+    }
+
+    function setRuletaBetQuick(fraction) {
         const val = Math.floor(state.balance * fraction);
-        document.getElementById('bancoDepositInput').value = val > 0 ? val : '';
+        document.getElementById('ruletaBetInput').value = val > 0 ? val : '';
     }
-    function setWithdrawQuick(fraction) {
-        const val = Math.floor(state.bankBalance * fraction);
-        document.getElementById('bancoWithdrawInput').value = val > 0 ? val : '';
-    }
+
+    window.spinRuletaCasino  = spinRuletaCasino;
+    window.setRuletaBetQuick = setRuletaBetQuick;
     // ─────────────────────────────────────────────────────────────────────────────
 
     // ─── HTML MUSEO (inyectado en body) ──────────────────────────────────────────
@@ -7536,80 +7624,43 @@
     document.getElementById('museoBackBtn').addEventListener('click', closeMuseo);
     // ─────────────────────────────────────────────────────────────────────────────
 
-    // ─── HTML BANCO (inyectado en body) ──────────────────────────────────────────
+    // ─── HTML RULETA DE CASINO (inyectado en body) ───────────────────────────────
     (function() {
         const overlay = document.createElement('div');
-        overlay.id = 'bancoOverlay';
+        overlay.id = 'ruletaCasinoOverlay';
         overlay.innerHTML = `
-            <div class="banco-topbar">
-                <button id="bancoBackBtn">← VOLVER AL JUEGO</button>
-                <div class="banco-topbar-title">🏦 BANCO — HUCHA DE INTERESES</div>
+            <div class="ruleta-casino-topbar">
+                <button id="ruletaCasinoBackBtn">← VOLVER AL JUEGO</button>
+                <div class="ruleta-casino-title">🎰 RULETA DE CASINO</div>
+                <div style="font-size:11px;color:#64748b;letter-spacing:1px;">Adivina el número exacto · Premio x55</div>
             </div>
-            <div class="banco-body">
-                <div class="banco-card">
-                    <div class="banco-icon">🏦</div>
-                    <div class="banco-card-title">HUCHA DE INTERESES</div>
-                    <div class="banco-subtitle">0.5% CADA 10 MINUTOS · DINERO INMOVILIZADO</div>
-
-                    <div class="banco-stats">
-                        <div class="banco-stat">
-                            <div class="banco-stat-label">💰 En el banco</div>
-                            <div class="banco-stat-value" id="bancoBalanceVal">0$</div>
+            <div class="ruleta-casino-body">
+                <div class="ruleta-wheel-col">
+                    <div class="ruleta-pointer">▼</div>
+                    <canvas id="ruletaCanvas" width="360" height="360"></canvas>
+                </div>
+                <div class="ruleta-bet-col">
+                    <div class="ruleta-selected-display" id="ruletaSelectedDisplay">🎯 Elige un número</div>
+                    <div class="ruleta-num-grid" id="ruletaNumGrid"></div>
+                    <div class="ruleta-bet-area">
+                        <input type="number" id="ruletaBetInput" class="ruleta-bet-input" placeholder="Cantidad a apostar…" min="1">
+                        <div class="ruleta-quick-row">
+                            <button onclick="setRuletaBetQuick(0.1)">10%</button>
+                            <button onclick="setRuletaBetQuick(0.25)">25%</button>
+                            <button onclick="setRuletaBetQuick(0.5)">50%</button>
+                            <button onclick="setRuletaBetQuick(1)">TODO</button>
                         </div>
-                        <div class="banco-stat">
-                            <div class="banco-stat-label">👛 Tu cartera</div>
-                            <div class="banco-stat-value wallet" id="bancoWalletVal">0$</div>
-                        </div>
+                        <button id="ruletaCasinoSpinBtn" onclick="spinRuletaCasino()">🎲 GIRAR LA RULETA</button>
+                        <div class="ruleta-odds">Número exacto → x55 tus monedas · 37 números (0–36)</div>
                     </div>
-
-                    <div class="banco-timer-bar">
-                        <div class="banco-timer-label">⏱ PRÓXIMO INTERÉS</div>
-                        <div class="banco-timer-track">
-                            <div class="banco-timer-fill" id="bancoTimerFill" style="width:0%"></div>
-                        </div>
-                        <div class="banco-timer-text" id="bancoTimerText">Deposita para empezar a ganar interés</div>
-                    </div>
-
-                    <div class="banco-actions">
-                        <div>
-                            <div style="font-size:11px;letter-spacing:2px;color:#64748b;text-transform:uppercase;margin-bottom:8px;">Depositar</div>
-                            <div class="banco-input-row">
-                                <input class="banco-input" id="bancoDepositInput" type="number" min="1" placeholder="Cantidad a depositar…">
-                                <button class="banco-btn banco-btn-deposit" onclick="depositarBanco()">DEPOSITAR</button>
-                            </div>
-                            <div class="banco-quick-btns" style="margin-top:8px;">
-                                <button class="banco-quick" onclick="setDepositQuick(0.1)">10%</button>
-                                <button class="banco-quick" onclick="setDepositQuick(0.25)">25%</button>
-                                <button class="banco-quick" onclick="setDepositQuick(0.5)">50%</button>
-                                <button class="banco-quick" onclick="setDepositQuick(1)">TODO</button>
-                            </div>
-                        </div>
-                        <div>
-                            <div style="font-size:11px;letter-spacing:2px;color:#64748b;text-transform:uppercase;margin-bottom:8px;">Retirar</div>
-                            <div class="banco-input-row">
-                                <input class="banco-input" id="bancoWithdrawInput" type="number" min="1" placeholder="Cantidad a retirar…">
-                                <button class="banco-btn banco-btn-withdraw" onclick="retirarBanco()">RETIRAR</button>
-                            </div>
-                            <div class="banco-quick-btns" style="margin-top:8px;">
-                                <button class="banco-quick" onclick="setWithdrawQuick(0.1)">10%</button>
-                                <button class="banco-quick" onclick="setWithdrawQuick(0.25)">25%</button>
-                                <button class="banco-quick" onclick="setWithdrawQuick(0.5)">50%</button>
-                                <button class="banco-quick" onclick="setWithdrawQuick(1)">TODO</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="banco-interest-note">
-                        ⚠️ El dinero depositado no puede usarse para comprar cofres, pociones ni apostar.<br>
-                        Retíralo cuando lo necesites, pero perderás el progreso del temporizador si retiras todo.
-                    </div>
+                    <div class="ruleta-casino-result" id="ruletaCasinoResult"></div>
                 </div>
             </div>
         `;
         document.body.appendChild(overlay);
     })();
-    document.getElementById('bancoBtnHeader').addEventListener('click', openBanco);
-    document.getElementById('bancoBackBtn').addEventListener('click', closeBanco);
+    document.getElementById('ruletaBtnHeader').addEventListener('click', openRuletaCasino);
+    document.getElementById('ruletaCasinoBackBtn').addEventListener('click', closeRuletaCasino);
     // ─────────────────────────────────────────────────────────────────────────────
 
     // ─── PARÁSITOS EN LA INTERFAZ ────────────────────────────────────────────────
